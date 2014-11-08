@@ -1,0 +1,12 @@
+<Alloy>
+	<View class="container">
+        <TextField 
+        	id="url"
+        	editable="true"
+        	value="1/ Enter url" />
+		<Label 
+			id="start"
+			text="2/ Click to start!"
+			onClick="doClick"/>
+	</View>
+</Alloy>

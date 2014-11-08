@@ -1,0 +1,36 @@
+".container": {
+	layout: "vertical",
+	// height: Ti.UI.SIZE,
+	backgroundColor:"cyan",
+}
+
+"#start": {	
+    accessibilityLabel:"start",
+	accessibilityValue:"2/ Click to start!",
+	top: 10,
+	textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+	color: "#336699",
+	font: {
+		fontSize: 12
+	}
+}
+
+"#url": {
+    accessibilityLabel: "url",
+	top: "40%",
+	color: "#000",
+	borderColor: "#000",
+	borderRadius: 5,
+	borderWidth: 1,
+	height: 18,
+	paddingRight: 3,
+	paddingLeft: 3,	
+	font: {
+		fontSize: 12
+	}
+
+	// color: "#336699",
+	// width: "250",
+	// height: "60"
+}
+  // top="10" left="10"   
