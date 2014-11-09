@@ -1,0 +1,15 @@
+".container": {
+	layout: "absolute",
+	backgroundColor:"white",
+}
+
+"#test_close": {	
+    accessibilityLabel:"test_close",
+	accessibilityValue:"Click to close!",
+	bottom: 0,
+	textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+	color: "#336699",
+	font: {
+		fontSize: 16
+	}
+}

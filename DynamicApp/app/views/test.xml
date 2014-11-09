@@ -1,0 +1,8 @@
+<Alloy>
+	<View class="container">
+		<Label 
+			id="test_close"
+			text="Click to close!"
+			onClick="doClick"/>
+	</View>
+</Alloy>
