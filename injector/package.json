@@ -1,0 +1,16 @@
+{
+  "name": "injector",
+  "version": "1.0.0",
+  "description": "A code injector for DynamicApp",
+  "main": "index,js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sebv",
+  "license": "Apache 2",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-traceur": "^0.14.0",
+    "merge-stream": "^0.1.6"
+  }
+}
