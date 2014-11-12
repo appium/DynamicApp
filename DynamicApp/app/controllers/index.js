@@ -15,7 +15,6 @@ if(Alloy.Globals.isIOS()) {
 }
 
 var welcome = Alloy.createController('welcome');
-var test= Alloy.createController('test');
 
 var activeView;
 
@@ -33,12 +32,39 @@ var switchToWelcomeView = function() {
 };
 exports.switchToWelcomeView = switchToWelcomeView;
 
+function createTextView() {
+	var testView = Titanium.UI.createView({
+		layout: "absolute",
+		backgroundColor:"white",
+	});
+	var testCloseLabel = Ti.UI.createLabel({
+		id: "test_close",
+		text:"Click to close!",
+	    accessibilityLabel:"test_close",
+		accessibilityValue:"Click to close!",
+		bottom: 0,
+		height: 'auto',
+		width: 'auto',
+		visible: true,
+		textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+		color: "#336699",
+		font: {
+			fontSize: 16
+		}
+	});
+	testCloseLabel.addEventListener('click', function(e) {
+		Alloy.Globals.MainController.switchToWelcomeView();
+	});
+	testView.add(testCloseLabel);
+	return testView;
+}
+
 exports.switchToTestView = function(code) {
 	clear();
-	var testView = test.getView();
+	var testView = createTextView();
 	eval('var runCode = ' + code + ';');
 	runCode(testView);
-	activeView = testView ;
+	activeView = testView;
 	$.index.add(testView );
 };
 switchToWelcomeView();
