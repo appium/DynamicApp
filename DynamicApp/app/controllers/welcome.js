@@ -1,8 +1,6 @@
 function doClick(e) {
 	// retrieving code
-	//var url = $.url.value;
-	var url = Ti.App.Properties.getString('codeUrl') || 
-		'http://localhost:8085/code/abc'; // dev only
+	var url = Alloy.Globals.codeUrl; 
 	var client = Ti.Network.createHTTPClient({
  		// function called when the response data is available
  		onload : function(e) {

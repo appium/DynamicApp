@@ -1,4 +1,19 @@
 Alloy.Globals.MainController = $;
+
+var osname = Ti.Platform.osname;    
+Alloy.Globals.isIOS = function() {
+    return osname === 'iphone' || osname === 'ipad';
+};
+Alloy.Globals.isAndroid = function() {
+    return osname === 'android';
+};
+
+if(Alloy.Globals.isIOS()) {
+	Alloy.Globals.codeUrl = 'http://localhost:8085/code';	
+} else if(Alloy.Globals.isAndroid ) {
+	Alloy.Globals.codeUrl = 'http://10.0.2.2:8085/code';
+}
+
 var welcome = Alloy.createController('welcome');
 var test= Alloy.createController('test');
 
