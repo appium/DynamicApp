@@ -1,0 +1,10 @@
+import Promise from 'bluebird';
+import _request from 'request';
+
+// promisifying libs
+const requestAsync = Promise.promisify(_request);
+const request = Promise.promisifyAll(_request);
+
+export {request, requestAsync};
+export default request;
+

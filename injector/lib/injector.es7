@@ -1,0 +1,113 @@
+import express from 'express';
+import http from 'http';
+import bodyParser from 'body-parser';
+import Promise from 'bluebird';
+import _ from 'underscore';
+import {requestAsync} from './request-async';
+import {Logger, log} from './log';
+
+let logger = new Logger('code-injector');
+
+const DEFAULT_PORT = 8085;
+const IOS = 'iOS';
+const ANDROID = 'Android';
+
+let normalizeDeviceType = (deviceType=null) => {
+  let resDeviceType = null;
+  if(!_.isNull(deviceType)) {
+    resDeviceType = _([IOS,ANDROID]).find((cat) => {
+      return cat.toLowerCase() === deviceType.toLowerCase().trim();
+    });
+  }
+  if(_.isNull(resDeviceType)) throw new Error('Could not determine device Type');
+  return resDeviceType;
+};
+
+let a = async function() {
+  
+}
+
+class CodeInjector {
+  constructor(deviceType, port=DEFAULT_PORT) {
+    this.deviceType = normalizeDeviceType(deviceType);
+    this.port = parseInt(port, 10);
+    this.opts = {};
+    this.code = null;
+  }
+
+  withOpts (opts={}) {
+    this.opts = opts;
+    return this;
+  }
+
+  async start() {
+    this.app = express();
+    this.app.use(bodyParser.json());
+
+    this.app.post('/code', (req, res) => {
+      // caching code and returning 200
+      this.code = req.body.code;
+      //this.silly('code injector is saving code.  code -->', this.code);
+      res.send(200);
+    });
+
+    this.app.get('/code', (req, res) => {
+      // retrieving the code and removing it from cache
+      let code = this.code;
+      if (!this.opts.noDelete) this.code = null;
+      //this.silly('code injector is sending code. code -->', code);
+      res.json({ code: code });
+    });
+
+    this.server = Promise.promisifyAll( http.createServer(this.app));
+    logger.info('code injector listening on', this.port);
+    await this.server.listenAsync(this.port);
+  }
+
+  async stop() {
+    logger.info('stoping code injector');
+    await this.server.closeAsync();
+  }
+
+  async postCode(code) {
+    code = '' + code;
+    let [res] = await requestAsync({
+      uri: 'http://localhost:' + this.port + '/code',
+      json: {
+        code: code
+      },
+      method: 'POST'
+    });
+    if (res.statusCode !== 200) throw new Error('code POST failed, statusCode -->', res.statusCode, ' .');
+  }
+
+  async injectCode(driver, code) {
+    await this.postCode(code);
+    if (env.IOS) {
+      await driver.waitForElementByAccessibilityId('welcome_start').click();
+      await driver.waitForElementByAccessibilityId('test_close');
+    } else if (env.ANDROID) {
+      await driver
+        .elementByAndroidUIAutomator(
+          'new UiSelector().descriptionContains("welcome_start")').click();
+      await driver.waitForElementByAndroidUIAutomator(
+        'new UiSelector().descriptionContains("test_close")');
+    } else throw new Error('Unknown env.');
+  }
+
+  async clearCode(driver) {
+    if (env.IOS) {
+      await driver.waitForElementById('test_close').click();
+      await waitForElementById('welcome_start');
+    } else if (env.ANDROID) {
+      await driver.waitForElementByAndroidUIAutomator(
+        'new UiSelector().descriptionContains("test_close")').click();
+      await driver.waitForElementByAndroidUIAutomator(
+        'new UiSelector().descriptionContains("welcome_start")');
+    } else throw new Error('Unknown env.');
+  }
+}
+
+export {CodeInjector, log};
+export default CodeInjector;
+

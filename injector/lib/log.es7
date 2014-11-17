@@ -1,0 +1,18 @@
+import log from 'npmlog';
+import _ from 'underscore';
+
+class Logger {
+  constructor (domainName) {
+    this.domainName = domainName;
+  }
+}
+
+_(log.levels).each((lvl, level) => {
+  Logger.prototype[level] = (...messages) => {
+    log[level](this.domainName, ...messages);
+  };
+});
+
+export {log, Logger};
+export default log;
+

@@ -9,8 +9,25 @@
   "author": "sebv",
   "license": "Apache 2",
   "devDependencies": {
+    "chai": "^1.10.0",
+    "clear": "0.0.1",
     "gulp": "^3.8.10",
+    "gulp-mocha": "^1.1.1",
+    "gulp-plumber": "^0.6.6",
+    "gulp-rename": "^1.2.0",
     "gulp-traceur": "^0.14.0",
-    "merge-stream": "^0.1.6"
+    "gulp-util": "^3.0.1",
+    "install": "^0.1.7",
+    "merge-stream": "^0.1.6",
+    "mocha-traceur": "^2.0.0",
+    "npm": "^2.1.8",
+    "run-sequence": "^1.0.1"
+  },
+  "dependencies": {
+    "bluebird": "^2.3.11",
+    "body-parser": "^1.9.2",
+    "npmlog": "^0.1.1",
+    "source-map-support": "^0.2.8",
+    "underscore": "^1.7.0"
   }
 }

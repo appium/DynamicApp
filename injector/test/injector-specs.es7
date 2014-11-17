@@ -1,0 +1,66 @@
+//# sourceMappingURL=path/to/source.map
+require('source-map-support').install();
+
+import chai from 'chai';
+import _ from 'underscore';
+import {CodeInjector, log} from '../lib/injector';
+import {requestAsync} from '../lib/request-async';
+
+chai.should();
+
+log.level = process.env.VERBOSE ? 'silly' : 'warn';
+
+describe('injector', () => {
+  it('should initialize injector',() => {
+    for(let deviceType of ['ios','iOS']) {
+      let injector = new CodeInjector(deviceType);
+      injector.deviceType.should.equal('iOS');
+    }
+    for(let deviceType of ['android','Android']) {
+      let injector = new CodeInjector(deviceType);
+      injector.deviceType.should.equal('Android');
+    }
+    let injector = new CodeInjector('iOS',7070)
+      .withOpts({randomOpt: 'abcd'});
+    injector.port.should.equal(7070);
+    injector.opts.randomOpt.should.equal('abcd');
+    injector = new CodeInjector('iOS','7171');
+    injector.port.should.equal(7171);
+  });
+
+ describe('quick e2e test', () => {
+   let injector,
+        code =  'codeEvalRes="Hey I ran some code here!";';
+
+   it('should start server', async () => {
+     injector = new CodeInjector('iOS');
+     await injector.start();
+    });
+
+    it('should inject some code', async () => {
+      await injector.postCode(code);
+      injector.code.should.equal(code);
+    });
+
+    it('should retrieve the code', async () => {
+      let [res] = await requestAsync({
+         uri: 'http://localhost:' + injector.port + '/code',
+         method: 'GET'
+       });
+       res.statusCode.should.equal(200);
+       JSON.parse(res.body).code.should.equal(code);
+    });
+
+    it('should stop the server', async () => {
+      await injector.stop();
+      injector = null;
+    });
+
+    after(async () => {
+      if(injector) await injector.stop();
+    });
+  });
+
+});
+
+
