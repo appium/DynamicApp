@@ -23,10 +23,6 @@ let normalizeDeviceType = (deviceType=null) => {
   return resDeviceType;
 };
 
-let a = async function() {
-  
-}
-
 class CodeInjector {
   constructor(deviceType, port=DEFAULT_PORT) {
     this.deviceType = normalizeDeviceType(deviceType);
